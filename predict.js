@@ -30,15 +30,6 @@
 
     // ---------- 'class'es ----------
 
-    function Word(word, occurrences) {
-        this.word = word;
-        this.occurrences = occurrences;
-    }
-
-    Word.prototype.toString = function () {
-        return this.word + ' (' + this.occurrences + ')';
-    };
-
     Array.prototype.toString = function () {
         var string = '';
         this.forEach(function (word) {
@@ -62,13 +53,39 @@
         return;
     }
 
+    function Word(word, occurrences) {
+        this.word = word;
+        this.occurrences = occurrences;
+    }
 
-    // ---------- Build tree from dictionary file ----------
+    Word.prototype.toString = function () {
+        return this.word + ' (' + this.occurrences + ')';
+    };
 
-    function buildTree() {
+    function Predict(words) {
+      this.keyMap = {
+          2: 'abc',
+          3: 'def',
+          4: 'ghi',
+          5: 'jkl',
+          6: 'mno',
+          7: 'pqrs',
+          8: 'tuv',
+          9: 'xyz'
+      };
+
+      this.words = words.toString()
+        .replace(/[:;!?",'\.\*\[\]\d\$]/g, '')
+        .replace(/\-\-/g, ' ')
+        .split(/\s+/g);
+
+      this.tree = this.buildTree();
+    }
+
+    Predict.prototype.buildTree = function buildTree() {
         var tree = {};
 
-        words.forEach(function (word) {
+        this.words.forEach(function (word) {
             var letters = word.split('');
             var leaf = tree;
 
@@ -79,7 +96,8 @@
 
                 // If child leaf doesn't exist, create it
                 if (typeof(existing) === 'undefined') {
-                    // If we're at the end of the word, mark with number, don't create a leaf
+                    // If we're at the end of the word, mark with number,
+                    // don't create a leaf
                     leaf = leaf[letter] = last ? 1 : {};
 
                 // If final leaf exists already
@@ -88,7 +106,8 @@
                     if (last) {
                         leaf[letter]++;
 
-                    // Otherwise, if we need to continue, create leaf object with '$' marker
+                    // Otherwise, if we need to continue,
+                    // create leaf object with '$' marker
                     } else {
                         leaf = leaf[letter] = { $: existing };
                     }
@@ -111,15 +130,15 @@
         });
 
         return tree;
-    }
+    };
 
 
     // ---------- Traverse tree with sequence ----------
-
+    Predict.prototype.findWords =
     function findWords(sequence, tree, exact, words, currentWord, depth) {
 
         var current = tree;
-        
+
         sequence = sequence.toString();
         words = words || [];
         currentWord = currentWord || '';
@@ -149,8 +168,9 @@
             // If the leaf's value maps to our key or we're still tracing
             // the prefix to the end of the tree (`exact` is falsy), then
             // "we must go deeper"...
-            if ((key && keyMap.hasOwnProperty(key) && keyMap[key].indexOf(leaf) > -1) || (!key && !exact)) {
-                findWords(sequence, value, exact, words, word, depth + 1);
+            if ((key && this.keyMap.hasOwnProperty(key) &&
+              this.keyMap[key].indexOf(leaf) > -1) || (!key && !exact)) {
+                this.findWords(sequence, value, exact, words, word, depth + 1);
             }
         }
 
@@ -159,17 +179,15 @@
         // going more than one way down the tree and we don't want to be
         // breaking the leaf loop
         return words;
-    }
+    };
 
 
     // ---------- Sort matches by occurrences ----------
-
-    function sortWords(words, sequence) {
+    Predict.prototype.sortWords = function sortWords(words) {
         return words.sort(function (first, second) {
             return second.occurrences - first.occurrences;
         });
-    }
-
+    };
 
     // ---------- Read dictionary file ----------
 
@@ -189,35 +207,27 @@
 
         time = new Date().getTime();
         console.log('Parsing dictionary contents...');
-        words = data.toString();
-        words = words.replace(/[:;!?",'\.\*\[\]\d\$]/g, '');
-        words = words.replace(/\-\-/g, ' ');
-        words = words.split(/\s+/g);
-        console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
-
-        time = new Date().getTime();
-        console.log('Building dictionary tree...');
-        var tree = buildTree();
+        var predict = new Predict(data);
         console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
 
         time = new Date().getTime();
         console.log('Finding exact matches...');
-        var exactWords = findWords(sequence, tree, true);
+        var exactWords = predict.findWords(sequence, predict.tree, true);
         console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
 
         time = new Date().getTime();
         console.log('Finding all matches...');
-        words = findWords(sequence, tree);
+        words = predict.findWords(sequence, predict.tree);
         console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
 
         time = new Date().getTime();
         console.log('Sorting exact matches...');
-        exactWords = sortWords(exactWords);
+        exactWords = predict.sortWords(exactWords);
         console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
 
         time = new Date().getTime();
         console.log('Sorting all matches...');
-        words = sortWords(words);
+        words = predict.sortWords(words);
         console.log('Done. [' + (new Date().getTime() - time).toString() + 'ms]');
 
         console.log('\n');
