@@ -1,0 +1,25 @@
+{
+  "name": "javascript-trie-predict",
+  "version": "1.0.0",
+  "description": "`node main.js test.txt 43556` to find hello",
+  "main": "main.js",
+  "scripts": {
+    "test": "jasmine-node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koshuang/javascript-trie-predict.git"
+  },
+  "keywords": [
+    "trie"
+  ],
+  "author": "Kos Huang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koshuang/javascript-trie-predict/issues"
+  },
+  "homepage": "https://github.com/koshuang/javascript-trie-predict#readme",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
+  }
+}
