@@ -28,7 +28,9 @@
   "nonstandard": true,
   "worker": true,
   "jasmine": true,
-  "predef": [],
+  "predef": [
+    "require"
+  ],
 
   "-W078": true
 }
