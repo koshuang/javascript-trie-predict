@@ -113,7 +113,7 @@ Predict.prototype.findWords =
         if (typeof(value) === 'number') {
           if (!exact && depth > sequence.length) {
             words.push(new Word(word, value));
-          } else if (exact && depth == sequence.length) {
+          } else if (exact && depth + 1 == sequence.length) {
             words.push(new Word(word, value));
           }
         }

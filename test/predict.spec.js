@@ -14,14 +14,27 @@ describe('Predict', function() {
     });
   });
 
-  it('should work', function() {
-    var sequence = '27';
+  describe('find exact', function() {
+    it('should work for 27', function() {
+      var sequence = '27';
 
-    var exactWords = predict.findWords(sequence, predict.tree, true);
+      var exactWords = predict.findWords(sequence, predict.tree, true);
 
-    expect(exactWords.length).toBe(3);
-    expect(exactWords[0].word).toBe('ar');
-    expect(exactWords[1].word).toBe('arx');
-    expect(exactWords[2].word).toBe('as');
+      expect(exactWords.length).toBe(2);
+      expect(exactWords[0].word).toBe('ar');
+      expect(exactWords[2].word).toBe('as');
+    });
+
+    it('should work for 43556', function() {
+      var sequence = '43556';
+
+      var exactWords = predict.findWords(sequence, predict.tree, true);
+
+      expect(exactWords.length).toBe(4);
+      expect(exactWords[0].word).toBe('gekko');
+      expect(exactWords[1].word).toBe('gelly');
+      expect(exactWords[2].word).toBe('hello');
+      expect(exactWords[3].word).toBe('helly');
+    });
   });
 });
