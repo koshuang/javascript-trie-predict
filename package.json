@@ -4,7 +4,7 @@
   "description": "`node main.js test.txt 43556` to find hello",
   "main": "main.js",
   "scripts": {
-    "test": "jasmine-node test"
+    "test": "jasmine-node test --color"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,10 @@
   },
   "homepage": "https://github.com/koshuang/javascript-trie-predict#readme",
   "devDependencies": {
-    "jasmine-node": "^1.14.5"
+    "gulp": "^3.9.0",
+    "gulp-run": "^1.6.11",
+    "gulp-watch": "^4.3.5",
+    "jasmine-node": "^1.14.5",
+    "node-notifier": "^4.3.1"
   }
 }

@@ -22,6 +22,6 @@ describe('Predict', function() {
     expect(exactWords.length).toBe(3);
     expect(exactWords[0].word).toBe('ar');
     expect(exactWords[1].word).toBe('arx');
-    expect(exactWords[2].word).toBe('ars');
+    expect(exactWords[2].word).toBe('as');
   });
 });
