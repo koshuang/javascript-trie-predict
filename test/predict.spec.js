@@ -22,12 +22,13 @@ describe('Predict', function() {
 
       expect(exactWords.length).toBe(2);
       expect(exactWords[0].word).toBe('ar');
-      expect(exactWords[2].word).toBe('as');
+      expect(exactWords[1].word).toBe('as');
     });
 
     it('should work for 43556', function() {
       var sequence = '43556';
 
+      var matchedWords = predict.findWords(sequence, predict.tree, false);
       var exactWords = predict.findWords(sequence, predict.tree, true);
 
       expect(exactWords.length).toBe(4);
@@ -35,6 +36,16 @@ describe('Predict', function() {
       expect(exactWords[1].word).toBe('gelly');
       expect(exactWords[2].word).toBe('hello');
       expect(exactWords[3].word).toBe('helly');
+
+
+      expect(matchedWords.length).toBe(7);
+      expect(matchedWords[0].word).toBe('gekko');
+      expect(matchedWords[1].word).toBe('gekkones');
+      expect(matchedWords[2].word).toBe('gekkonid');
+      expect(matchedWords[3].word).toBe('gekkonidae');
+      expect(matchedWords[4].word).toBe('gekkonoid');
+      expect(matchedWords[5].word).toBe('gekkota');
+      expect(matchedWords[6].word).toBe('hellness');
     });
   });
 });
